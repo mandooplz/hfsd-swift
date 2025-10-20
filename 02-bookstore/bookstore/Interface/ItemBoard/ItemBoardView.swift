@@ -20,7 +20,7 @@ struct ItemBoardView: View {
                 NavigationLink {
                     ItemView(item)
                 } label: {
-                    Text(item.fomattedTimestamp)
+                    ItemLabel(item)
                 }
                 .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                     Button(role: .destructive) {
@@ -30,6 +30,7 @@ struct ItemBoardView: View {
                     }
                 }
             }
+            .navigationTitle(Text("Items"))
             .toolbar {
                 ToolbarItem {
                     Button {
