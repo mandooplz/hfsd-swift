@@ -8,9 +8,9 @@ import Foundation
 
 
 // MARK: Object
-class Window {
+public class Window {
     // MARK: core
-    init(_ owner: NumberData, _ values: [Int]) {
+    public init(_ owner: NumberData, _ values: [Int]) {
         self.owner = owner
         self.values = values
         self.size = values.count
@@ -35,7 +35,7 @@ class Window {
     }
     
     // MARK: action
-    func addMaxValue() {
+    public func addMaxValue() {
         // capture
         guard let maxValue = self.maxValue() else {
             print("최대값이 존재하지 않습니다.")
@@ -45,7 +45,7 @@ class Window {
         // mutate
         owner.result.append(maxValue)
     }
-    func moveRight() {
+    public func moveRight() {
         // capture
         let nextPosition = endPosition.advanced(by: 1)
         guard let nextValue = owner.getNumber(at: nextPosition) else {

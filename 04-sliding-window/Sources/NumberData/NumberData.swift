@@ -18,21 +18,21 @@ public class NumberData {
     
     
     // MARK: state
-    private let numbers: [Int]
+    internal let numbers: [Int]
     internal func getNumber(at index: Int) -> Int? {
         guard index >= 0 && index < numbers.count else { return nil }
         return numbers[index]
     }
     
     let windowSize: Int
-    var window: Window? = nil
-    var result: [Int] = []
-    var isFinished: Bool = false
+    public var window: Window? = nil
+    public var result: [Int] = []
+    public var isFinished: Bool = false
     
     
     
     // MARK: action
-    func setUpWindow() {
+    public func setUpWindow() {
         // capture
         guard window == nil else {
             return
