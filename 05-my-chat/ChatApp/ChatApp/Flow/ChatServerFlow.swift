@@ -131,23 +131,23 @@ actor ChatServerFlow {
         onClose: (@Sendable (Error?) -> Void)? = nil
     ) async throws {
         logger.start()
-        let query = [URLQueryItem(name: "client", value: clientId.uuidString)]
+        
 
         logger.info("Start WebSocketSession")
-        let task = try url.startWSTask(path: "ws", queryItems: query)
+        let wsQuery = [URLQueryItem(name: "client", value: clientId.uuidString)]
+        let task = try url.startWSTask(path: "ws", queryItems: wsQuery)
         
         logger.info("Configure URLRequest")
+        let subscribeQuery = [URLQueryItem(name: "client", value: clientId.uuidString)]
         let request = try url.getHTTPRequest(path: "subscribe",
                                              method: .post,
-                                             queryItems: query)
+                                             queryItems: subscribeQuery)
         
         logger.info("Send HTTPRequest to /subscribe")
         let (_, response) = try await request.getDataByURLSession()
         
         logger.info("Validate URLResponse")
         try response.validateStatusCode()
-
-        
 
         // 시작 즉시 수신 루프 연결
         startReceiveLoop(

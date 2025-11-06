@@ -99,6 +99,7 @@ final class ChatApp: Sendable {
                     } else {
                         logger.info("WebSocket closed normally")
                     }
+                    
                     Task { @MainActor [weak self] in
                         self?.isSubscribed = false
                     }

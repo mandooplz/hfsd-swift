@@ -14,7 +14,7 @@ private let logger = SwiftLogger("ChatServerURL")
 struct ChatServerURL {
     // MARK: core
     let httpURL = URL(string: "http://172.30.1.69:8080")!
-    let wsURL = URL(string: "ws://127.0.0.1:8080")!
+    let wsURL = URL(string: "ws://172.30.1.69:8080")!
     
      
     // MARK: operator

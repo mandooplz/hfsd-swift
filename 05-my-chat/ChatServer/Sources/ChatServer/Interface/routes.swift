@@ -80,7 +80,7 @@ func routes(_ app: Application) throws {
         await chatServerRef.processMessageTickets()
         
         let newMessageEvent = NewMsgEvent(client: ticket.client, senderEmail: ticket.credential.email, content: ticket.content)
-        let _ = await chatServerRef.sendEvent(newMessageEvent)
+        await chatServerRef.sendEvent(newMessageEvent)
         
         return .accepted
     }
@@ -119,13 +119,13 @@ func routes(_ app: Application) throws {
             do {
                 // clientId 추출
                 guard let token = req.query[String.self, at: "token"] else {
-                    logger.error("Client에서 token이 전달되지 않았습니다.")
-                    try await ws.send("Token is missing")
+                    req.logger.error("Client에서 token이 전달되지 않았습니다.")
+                    try await ws.send("token 쿼리 매개변수가 존재하지 않습니다.")
                     try await ws.close()
                     return
                 }
                 guard let clientId = UUID(uuidString: token) else {
-                    logger.error("Token이 UUID 형식이 아닙니다.")
+                    req.logger.error("Token이 UUID 형식이 아닙니다.")
                     try await ws.send("token이 UUID 형식이 아닙니다.")
                     return
                 }
@@ -146,6 +146,9 @@ func routes(_ app: Application) throws {
 
                         logger.info("WebSocket closed: \(clientId) - \(reason)")
                         await Hub.shared.leave(clientId: clientId)
+                        await MainActor.run {
+                            ChatServer.shared.subscribers.removeValue(forKey: clientId)
+                        }
                     }
                 }
             } catch {

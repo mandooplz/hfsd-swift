@@ -38,12 +38,10 @@ final class ChatServer: Sendable {
     }
     
     var subscribers: Dictionary<UUID, ClientFlow> = [:]
-    func sendEvent(_ event: NewMsgEvent) -> Void {
+    func sendEvent(_ event: NewMsgEvent) async {
         logger.start()
         
-        for subscriber in subscribers.values {
-            subscriber.execute(event: event)
-        }
+        await Hub.shared.sendWithout(clientId: event.client, event: event)
     }
     
     
