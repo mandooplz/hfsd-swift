@@ -20,17 +20,17 @@ final class ChatApp: Sendable {
 
     // MARK: state
     let serverFlow = ChatServerFlow.shared
-    let clientId = UUID()
+    let clientId = UUID() // 객체마다 고유함
     
     var signInForm: SignInForm? = nil
     var signUpForm: SignUpForm? = nil
     var credential: Credential? = nil
     
     private var messages: Set<Message> = []
-    private var sortedMessages: [Message] {
+    var sortedMessages: [Message] {
         return messages.sorted(using: SortDescriptor(\.createdAt))
     }
-    private var isSubscribed: Bool = false
+    private(set) var isSubscribed: Bool = false
     
     
     // MARK: action
@@ -52,14 +52,19 @@ final class ChatApp: Sendable {
         
         // capture
         guard let credential else {
-            logger.error("Credential is missing. Cannot fetch messages.")
+            logger.error("현재 로그인되지 않은 상태입니다. SignInForm을 통해 로그인 과정이 먼저 필요합니다.")
             return
         }
+        
         do {
-            let remoteMessages = try await serverFlow.getMessages(credential: credential)
-            messages = Set(remoteMessages)
+            // compute
+            let newMessages = try await serverFlow.getMessages(credential: credential)
+            
+            // mutate
+            self.messages = Set(newMessages)
         } catch {
-            logger.error("Failed to fetch messages: \(error)")
+            logger.error(error)
+            return
         }
     }
     
@@ -142,10 +147,6 @@ final class ChatApp: Sendable {
         }
         guard event.client != clientId else { return }
         Task { await self.fetchMessages() }
-    }
-
-    var messageTimeline: [Message] {
-        sortedMessages
     }
 
     func completeAuthentication(with credential: Credential) async {

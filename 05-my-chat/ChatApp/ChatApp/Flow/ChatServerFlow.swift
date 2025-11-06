@@ -5,6 +5,9 @@
 //  Created by 김민우 on 11/5/25.
 //
 import Foundation
+import SwiftLogger
+
+private let logger = SwiftLogger("ChatServerFlow")
 
 
 // MARK: Flow
@@ -52,32 +55,58 @@ actor ChatServerFlow {
 
     @concurrent
     func authenticate(credential: Credential) async throws -> Bool {
+        logger.start()
+        
+        logger.info("makeRequest")
         var request = try makeRequest(path: "auth", method: .post)
         
+        logger.info("encoding to json")
         let encoder = makeJSONEncoder()
         request.httpBody = try encoder.encode(credential)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
+        logger.info("networking")
         let (data, response) = try await session.data(for: request)
+        
+        logger.info("validate")
         try validate(response: response)
+        
+        logger.info("decoding from json")
         let decoder = JSONDecoder()
-        return try decoder.decode(Bool.self, from: data)
+        let result = try decoder.decode(Bool.self, from: data)
+        
+        logger.end()
+        return result
     }
 
     @concurrent
     func getMessages(credential: Credential) async throws -> [Message] {
+        logger.start()
         let queryItems = [
             URLQueryItem(name: "email", value: credential.email),
             URLQueryItem(name: "password", value: credential.password)
         ]
+        
+        logger.info("makeRequest")
         let request = try makeRequest(path: "getMessages", method: .get, queryItems: queryItems)
         
+        logger.info("urlsession.data")
         let (data, response) = try await session.data(for: request)
+        
+        logger.info("validate")
         try validate(response: response)
         
+        logger.info("decode json")
         let decoder = makeJSONDecoder()
-        guard data.isEmpty == false else { return [] }
-        return try decoder.decode([Message].self, from: data)
+        let result: [Message]
+        if data.isEmpty {
+            result = []
+        } else {
+            result = try decoder.decode([Message].self, from: data)
+        }
+        
+        logger.end()
+        return result
     }
 
     func subscribe(
@@ -122,6 +151,7 @@ private extension ChatServerFlow {
     }
     
     nonisolated func makeRequest(path: String?, method: HTTPMethod, queryItems: [URLQueryItem] = []) throws -> URLRequest {
+        // configure URL
         var url = baseURL
         if let path, path.isEmpty == false {
             url.appendPathComponent(path)
@@ -135,12 +165,18 @@ private extension ChatServerFlow {
         guard let finalURL = components.url else {
             throw FlowError.invalidURL(path ?? baseURL.path)
         }
+        
+        
+        // configure URLRequest
         var request = URLRequest(url: finalURL)
         request.httpMethod = method.rawValue
+        
+        // return
         return request
     }
     
     nonisolated func makeWebSocketURL(path: String, queryItems: [URLQueryItem]) throws -> URL {
+        // configure URL
         var url = baseURL
         if path.isEmpty == false {
             url.appendPathComponent(path)
@@ -150,11 +186,11 @@ private extension ChatServerFlow {
         }
         components.scheme = "ws"
         components.queryItems = queryItems.isEmpty ? nil : queryItems
-        
-        
         guard let finalURL = components.url else {
             throw FlowError.invalidURL(path)
         }
+        
+        // return
         return finalURL
     }
     

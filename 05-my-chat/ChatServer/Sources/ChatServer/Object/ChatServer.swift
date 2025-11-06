@@ -57,6 +57,7 @@ final class ChatServer: Sendable {
         // mutate
         let tickets = newMessageTickets
         newMessageTickets.removeAll()
+        
         for ticket in tickets {
             let message = Message(senderEmail: ticket.credential.email,
                                   content: ticket.content,

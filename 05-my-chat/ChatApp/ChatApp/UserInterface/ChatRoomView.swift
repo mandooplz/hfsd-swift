@@ -54,7 +54,7 @@ struct ChatRoomView: View {
     }
     
     private var messageTimeline: some View {
-        List(app.messageTimeline, id: \.id) { message in
+        List(app.sortedMessages, id: \.id) { message in
             MessageRowView(message: message)
                 .listRowSeparator(.hidden)
         }
