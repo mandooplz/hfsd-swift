@@ -89,8 +89,8 @@ final class ChatApp: Sendable {
             try await serverFlow.subscribe(
                 clientId: clientId,
                 onText: { [weak self] textData in
-                    Task { [weak self] in
-                        await self?.fetchMessages()
+                    Task {
+                        await self?.handleWebSocketText(textData)
                     }
                 },
                 onClose: { [weak self] error in
@@ -143,5 +143,19 @@ final class ChatApp: Sendable {
         }
         
         logger.end()
+    }
+
+    private func handleWebSocketText(_ text: String) async {
+        guard let data = text.data(using: .utf8) else {
+            logger.error("웹소켓 메시지를 Data로 변환할 수 없습니다: \(text)")
+            return
+        }
+
+        do {
+            _ = try JSON.decoder.decode(NewMsgEvent.self, from: data)
+            await fetchMessages()
+        } catch {
+            logger.error("서버에서 받은 메시지: \(text)")
+        }
     }
 }

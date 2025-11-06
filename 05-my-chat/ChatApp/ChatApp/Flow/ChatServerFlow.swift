@@ -132,9 +132,8 @@ actor ChatServerFlow {
     ) async throws {
         logger.start()
         
-
         logger.info("Start WebSocketSession")
-        let wsQuery = [URLQueryItem(name: "client", value: clientId.uuidString)]
+        let wsQuery = [URLQueryItem(name: "token", value: clientId.uuidString)]
         let task = try url.startWSTask(path: "ws", queryItems: wsQuery)
         
         logger.info("Configure URLRequest")

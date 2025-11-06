@@ -54,12 +54,6 @@ struct ChatRoomView: View {
             .refreshable {
                 await app.fetchMessages()
             }
-            .onChange(of: app.sortedMessages) { ids in
-                guard let last = ids.last else { return }
-                withAnimation {
-                    proxy.scrollTo(last, anchor: .bottom)
-                }
-            }
             .task {
                 guard let last = app.sortedMessages.last?.id else { return }
                 proxy.scrollTo(last, anchor: .bottom)
