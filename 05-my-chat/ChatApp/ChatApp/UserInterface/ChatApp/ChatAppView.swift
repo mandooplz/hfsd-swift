@@ -13,7 +13,7 @@ private let logger = SwiftLogger("ChatAppView")
 
 // MARK: View
 struct ChatAppView: View {
-    // MARK: model
+    // MARK: core
     @State private var app = ChatApp()
     
     // MARK: body
@@ -37,6 +37,7 @@ struct ChatAppView: View {
 }
 
 
+// MARK: Preview
 #Preview {
     ChatAppView()
 }

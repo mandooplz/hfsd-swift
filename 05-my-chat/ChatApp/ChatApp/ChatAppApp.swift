@@ -4,9 +4,10 @@
 //
 //  Created by 김민우 on 11/4/25.
 //
-
 import SwiftUI
 
+
+// MARK: View
 @main
 struct ChatAppApp: App {
     var body: some Scene {

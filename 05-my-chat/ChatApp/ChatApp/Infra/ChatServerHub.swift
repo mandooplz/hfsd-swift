@@ -20,6 +20,7 @@ actor ChatServerHub {
     // MARK: state
     nonisolated let clientId = UUID()
     nonisolated let url = ChatServerURL()
+    
     var newMessageFlow: NewMessageFlow? = nil
     func setNewMessageFlow(_ flow: @escaping NewMessageFlow) {
         self.newMessageFlow = flow
