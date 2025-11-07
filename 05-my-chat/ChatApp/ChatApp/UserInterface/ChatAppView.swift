@@ -4,9 +4,11 @@
 //
 //  Created by 김민우 on 11/5/25.
 //
-
 import SwiftUI
 import Observation
+import SwiftLogger
+
+private let logger = SwiftLogger("ChatAppView")
 
 
 // MARK: View

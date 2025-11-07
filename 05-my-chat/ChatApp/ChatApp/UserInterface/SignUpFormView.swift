@@ -4,11 +4,11 @@
 //
 //  Created by 김민우 on 11/6/25.
 //
-
-
 import SwiftUI
 import Observation
 
+
+// MARK: View
 struct SignUpFormView: View {
     @Bindable var form: SignUpForm
     @State private var isSubmitting = false

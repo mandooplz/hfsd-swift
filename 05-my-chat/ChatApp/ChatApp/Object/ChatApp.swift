@@ -7,6 +7,7 @@
 import Foundation
 import Observation
 import SwiftLogger
+import Collections
 
 private let logger = SwiftLogger("ChatApp")
 
@@ -25,6 +26,11 @@ final class ChatApp: Sendable {
     var signInForm: SignInForm? = nil
     var signUpForm: SignUpForm? = nil
     var credential: Credential? = nil
+    
+    private var newMsgEvents: Deque<NewMsgEvent> = []
+    func addMsgEvent(_ event: NewMsgEvent) {
+        self.newMsgEvents.append(event)
+    }
     
     private var messages: Set<Message> = []
     var sortedMessages: [Message] {
@@ -71,49 +77,63 @@ final class ChatApp: Sendable {
             return
         }
     }
-    func subscribeServer() async {
-        logger.start()
-        
-        // capture
-        guard isSubscribed == false else {
-            logger.info("Already subscribed to server")
-            return
-        }
-        guard credential != nil else {
-            logger.error("Credential missing; subscription aborted")
-            return
-        }
-        
-        do {
-            // compute -> 여기서 Flow를 제공한가.
-            try await serverFlow.subscribe(
-                clientId: clientId,
-                onText: { [weak self] textData in
-                    Task {
-                        await self?.handleWebSocketText(textData)
-                    }
-                },
-                onClose: { [weak self] error in
-                    if let error {
-                        logger.error("WebSocket closed with error: \(error.localizedDescription)")
-                    } else {
-                        logger.info("WebSocket closed normally")
-                    }
-                    
-                    Task { @MainActor [weak self] in
-                        self?.isSubscribed = false
-                    }
-                }
-            )
+    
+    func processMsgEvents() async {
+        // mutate
+        while !newMsgEvents.isEmpty {
+            let newMsgEvent = newMsgEvents.removeFirst()
             
-            // mutate
-            isSubscribed = true
-        } catch {
-            logger.error("Failed to subscribe: \(error.localizedDescription)")
-            isSubscribed = false
-            return
+            let newMessgae = Message(senderEmail: newMsgEvent.senderEmail,
+                                     content: newMsgEvent.content,
+                                     createdAt: .now)
+            self.messages.insert(newMessgae)
         }
     }
+//    func subscribeServer() async {
+//        logger.start()
+//        
+//        // capture
+//        guard isSubscribed == false else {
+//            logger.info("Already subscribed to server")
+//            return
+//        }
+//        guard credential != nil else {
+//            logger.error("Credential missing; subscription aborted")
+//            return
+//        }
+//        
+//        do {
+//            // compute
+//            try await serverFlow.subscribe(
+//                clientId: clientId,
+//                onText: { [weak self] textData in
+//                    // newMsg 이벤트 시 실행할 Flow
+//                    Task {
+//                        await self?.handleWebSocketText(textData)
+//                    }
+//                },
+//                onClose: { [weak self] error in
+//                    // close 이벤트시 실행할 Flow
+//                    if let error {
+//                        logger.error("WebSocket closed with error: \(error.localizedDescription)")
+//                    } else {
+//                        logger.info("WebSocket closed normally")
+//                    }
+//                    
+//                    Task { @MainActor [weak self] in
+//                        self?.isSubscribed = false
+//                    }
+//                }
+//            )
+//            
+//            // mutate
+//            isSubscribed = true
+//        } catch {
+//            logger.error("Failed to subscribe: \(error.localizedDescription)")
+//            isSubscribed = false
+//            return
+//        }
+//    }
     func sendMessage() async {
         logger.start()
         

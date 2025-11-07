@@ -4,12 +4,14 @@
 //
 //  Created by 김민우 on 11/5/25.
 //
-
 import SwiftUI
 import Observation
+import SwiftLogger
+
+private let logger = SwiftLogger("ChatRoomView")
 
 
-// MARK: UserInterface
+// MARK: View
 struct ChatRoomView: View {
     @Bindable var app: ChatApp
     
@@ -23,10 +25,36 @@ struct ChatRoomView: View {
         }
         .task(id: app.credential?.email) {
             await app.fetchMessages()
-            await app.subscribeServer()
+            await subscribeChatServer()
         }
     }
     
+    private func subscribeChatServer() async {
+        let hub = ChatServerHub.shared
+        
+        await hub.setNewMessageFlow { event in
+            Task {
+                await app.addMsgEvent(event)
+                
+                await app.processMsgEvents()
+            }
+        }
+        
+        
+        await hub.setCloseFlow { error in
+            Task {
+                logger.error(error!)
+            }
+        }
+        
+        await hub.connect()
+    }
+    
+}
+
+
+// MARK: SubView
+extension ChatRoomView {
     private var header: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
@@ -83,3 +111,6 @@ struct ChatRoomView: View {
         .padding()
     }
 }
+
+
+//
