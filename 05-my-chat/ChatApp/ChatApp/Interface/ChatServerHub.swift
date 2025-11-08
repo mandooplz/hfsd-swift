@@ -6,6 +6,7 @@
 //
 import Foundation
 import SwiftLogger
+import MyChatValues
 
 private let logger = SwiftLogger("ChatServerHub")
 

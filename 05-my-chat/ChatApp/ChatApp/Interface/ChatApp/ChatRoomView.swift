@@ -7,6 +7,7 @@
 import SwiftUI
 import Observation
 import SwiftLogger
+import MyChatValues
 
 private let logger = SwiftLogger("ChatRoomView")
 
