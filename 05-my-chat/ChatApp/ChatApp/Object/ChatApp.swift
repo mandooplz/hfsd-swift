@@ -8,6 +8,8 @@ import Foundation
 import Observation
 import SwiftLogger
 import Collections
+import ChatServerFlows
+import MyChatValues
 
 private let logger = SwiftLogger("ChatApp")
 
@@ -32,7 +34,7 @@ final class ChatApp: Sendable {
         self.newMsgEvents.append(event)
     }
     
-    private var messages: Set<Message> = []
+    var messages: Set<Message> = []
     var sortedMessages: [Message] {
         return messages.sorted(using: SortDescriptor(\.createdAt))
     }
@@ -118,3 +120,5 @@ final class ChatApp: Sendable {
         }
     }
 }
+
+

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MyChatValues
 
 
 // MARK: UserInterface
@@ -22,7 +23,6 @@ struct MessageRowView: View {
             }
             Spacer()
         }
-        .padding(.vertical, 6)
     }
 
     private var header: some View {
@@ -39,8 +39,12 @@ struct MessageRowView: View {
 }
 
 
-#Preview {
-    MessageRowView(message: Message(senderEmail: "user@example.com", content: "안녕하세요!", createdAt: .now))
-        .previewLayout(.sizeThatFits)
+// MARK: Preview
+#Preview(traits: .sizeThatFitsLayout){
+    let message = Message(senderEmail: "user@example.com",
+                          content: "안녕하세요! 처음이에요",
+                          createdAt: .now)
+    
+    MessageRowView(message: message)
         .padding()
 }

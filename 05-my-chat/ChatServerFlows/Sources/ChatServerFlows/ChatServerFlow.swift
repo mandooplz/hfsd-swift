@@ -6,14 +6,15 @@
 //
 import Foundation
 import SwiftLogger
+import MyChatValues
 
 private let logger = SwiftLogger("ChatServerFlow")
 
 
 // MARK: Flow
-actor ChatServerFlow {
+public actor ChatServerFlow {
     // MARK: value
-    static let shared = ChatServerFlow()
+    public static let shared = ChatServerFlow()
     private init() { }
     
     private let url = ChatServerURL()
@@ -21,7 +22,7 @@ actor ChatServerFlow {
     
     // MARK: Flow
     @concurrent
-    func check() async throws {
+    public func check() async throws {
         logger.start()
         
         logger.info("makeRequest")
@@ -38,7 +39,7 @@ actor ChatServerFlow {
     }
     
     @concurrent
-    func addMessage(ticket: NewMsgTicket) async throws {
+    public func addMessage(ticket: NewMsgTicket) async throws {
         logger.start()
         
         logger.info("configure URLRequest")
@@ -55,7 +56,7 @@ actor ChatServerFlow {
     }
 
     @concurrent
-    func register(credential: Credential) async throws {
+    public func register(credential: Credential) async throws {
         logger.start()
         
         logger.info("Configure URLRequest")
@@ -72,7 +73,7 @@ actor ChatServerFlow {
     }
 
     @concurrent
-    func authenticate(credential: Credential) async throws -> Bool {
+    public func authenticate(credential: Credential) async throws -> Bool {
         logger.start()
         
         logger.info("Configure URLRequest")
@@ -94,7 +95,7 @@ actor ChatServerFlow {
     }
 
     @concurrent
-    func getMessages(credential: Credential) async throws -> [Message] {
+    public func getMessages(credential: Credential) async throws -> [Message] {
         logger.start()
         
         logger.info("Configure URLRequest")
