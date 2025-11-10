@@ -5,6 +5,7 @@
 //  Created by 김민우 on 11/6/25.
 //
 import Foundation
+import MyChatValues
 
 
 // MARK: Value
