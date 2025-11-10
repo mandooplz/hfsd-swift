@@ -24,4 +24,4 @@
 
 ## Demo
 
-![bookstore 시연 영상](bookstore_demo.gif)
+<img src="bookstore_demo.gif" width="50%">
