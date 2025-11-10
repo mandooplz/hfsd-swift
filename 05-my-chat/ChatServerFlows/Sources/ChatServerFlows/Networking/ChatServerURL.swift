@@ -11,7 +11,7 @@ private let logger = SwiftLogger("ChatServerURL")
 
 
 // MARK: Value
-struct ChatServerURL {
+nonisolated struct ChatServerURL: Sendable {
     // MARK: core
     let httpURL = URL(string: "http://172.30.1.69:8080")!
     let wsURL = URL(string: "ws://172.30.1.69:8080")!
