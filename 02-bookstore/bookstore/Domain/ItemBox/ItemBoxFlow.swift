@@ -4,8 +4,7 @@
 //
 //  Created by 김민우 on 10/20/25.
 //
-import CoreData
-
+import CoreData 
 
 
 // MARK: Flow Interface

@@ -48,6 +48,39 @@
 		CED822D32EC21737002A9841 /* ItemBox.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ItemBox.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CED822E12EC218DC002A9841 /* Exceptions for "ItemBox" folder in "bookstore" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Domain/ItemBox/bookstore.xcdatamodeld,
+				Domain/ItemBox/PersistenceController.swift,
+			);
+			target = CE0ED9392EA63FD400EAACFC /* bookstore */;
+		};
+		CED822E22EC218DC002A9841 /* Exceptions for "ItemBox" folder in "ItemBox" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Domain/ItemBox/bookstore.xcdatamodeld,
+				Domain/ItemBox/PersistenceController.swift,
+			);
+			target = CED822D22EC21737002A9841 /* ItemBox */;
+		};
+		CED822E42EC21D16002A9841 /* Exceptions for "bookstoreTests" folder in "bookstore" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Mock/ItemBox/ItemBoxFlowMock.swift,
+			);
+			target = CE0ED9392EA63FD400EAACFC /* bookstore */;
+		};
+		CED822E52EC21D16002A9841 /* Exceptions for "bookstoreTests" folder in "bookstoreTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Mock/ItemBox/ItemBoxFlowMock.swift,
+			);
+			target = CE0ED95B2EA648C100EAACFC /* bookstoreTests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CE0ED93C2EA63FD400EAACFC /* bookstore */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -56,11 +89,19 @@
 		};
 		CE0ED95D2EA648C100EAACFC /* bookstoreTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CED822E42EC21D16002A9841 /* Exceptions for "bookstoreTests" folder in "bookstore" target */,
+				CED822E52EC21D16002A9841 /* Exceptions for "bookstoreTests" folder in "bookstoreTests" target */,
+			);
 			path = bookstoreTests;
 			sourceTree = "<group>";
 		};
 		CED822D42EC21737002A9841 /* ItemBox */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CED822E12EC218DC002A9841 /* Exceptions for "ItemBox" folder in "bookstore" target */,
+				CED822E22EC218DC002A9841 /* Exceptions for "ItemBox" folder in "ItemBox" target */,
+			);
 			path = ItemBox;
 			sourceTree = "<group>";
 		};
@@ -499,6 +540,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3X262XJF5T;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.budjam.bookstoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -522,6 +564,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 3X262XJF5T;
 				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.budjam.bookstoreTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
