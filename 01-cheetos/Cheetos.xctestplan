@@ -23,9 +23,9 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:",
-        "identifier" : "CheetosTests",
-        "name" : "CheetosTests"
+        "containerPath" : "container:Cheetos-iOS.xcodeproj",
+        "identifier" : "CE126ED32EA6014F007764C2",
+        "name" : "Cheetos-iOSTests"
       }
     }
   ],

@@ -29,7 +29,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let cheetosRef = Cheetos()
 
         // ViewController 생성
-        let viewController = CheetosController()
+        let viewController = CheetosController(cheetosRef)
         viewController.view.backgroundColor = .systemBackground
         
         let navigationController = UINavigationController(rootViewController: viewController)

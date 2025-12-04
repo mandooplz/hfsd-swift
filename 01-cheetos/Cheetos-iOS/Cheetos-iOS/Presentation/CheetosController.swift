@@ -8,11 +8,13 @@ import UIKit
 import Observation
 
 
-// 루트 화면
+// MARK: View
 final class CheetosController: UIViewController {
-    // object
-    private let cheetosRef: Cheetos = Cheetos()
-    init() {
+    //
+    private let cheetosRef: Cheetos
+    init(_ cheetosRef: Cheetos) {
+        self.cheetosRef = cheetosRef
+        
         super.init(nibName: nil, bundle: nil)
         self.title = "운세 메신저"
     }
@@ -60,7 +62,7 @@ final class CheetosController: UIViewController {
         let base = inputBarHeight + barTopSpacing + bottomPadding + view.safeAreaInsets.bottom
         let inset = base + extraKeyboard
         tableView.contentInset.bottom = inset
-        tableView.scrollIndicatorInsets.bottom = inset
+        tableView.verticalScrollIndicatorInsets.bottom = inset
     }
 
     private final class EmptyStateView: UIView {
@@ -95,7 +97,7 @@ final class CheetosController: UIViewController {
         
         let baseInset: CGFloat = 60 // 입력바 높이 + 여유
         tableView.contentInset.bottom = baseInset
-        tableView.scrollIndicatorInsets.bottom = baseInset
+        tableView.verticalScrollIndicatorInsets.bottom = baseInset
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -353,4 +355,9 @@ final class PlaceholderMessageController: UIViewController {
             label.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -12),
         ])
     }
+}
+
+
+#Preview {
+    CheetosController(.init())
 }
