@@ -191,7 +191,7 @@ final class CheetosController: UIViewController {
             }
 
             // Fetch가 필요한 Fortune은 내용 도착 후 해당 행만 즉시 리로드 (애니메이션 없음)
-            if let last = cheetosRef.messages.last as? Fortune.ID, let f = last.ref, f.isLoading {
+            if let f = cheetosRef.messages.last as? Fortune, f.isLoading {
                 await f.fetch()
                 await MainActor.run {
                     if newRow < self.cheetosRef.messages.count {
@@ -302,23 +302,28 @@ extension CheetosController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { cheetosRef.messages.count }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let idAny = cheetosRef.messages[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: MessageHostingCell.reuseID, for: indexPath) as! MessageHostingCell
+        let message = cheetosRef.messages[indexPath.row]
+
+        let cell = tableView.dequeueReusableCell(
+            withIdentifier: MessageHostingCell.reuseID,
+            for: indexPath
+        ) as! MessageHostingCell
         cell.selectionStyle = .none
         cell.unembedIfNeeded()
 
-        if let fID = idAny as? Fortune.ID, let f = fID.ref {
+        if let fortune = message as? Fortune {
             let vc = FortuneController()
-            vc.configure(fortune: f)
+            vc.configure(fortune: fortune)
             cell.embed(vc, into: self)
-        } else if let mID = idAny as? MyMessage.ID, let m = mID.ref {
+        } else if let myMessage = message as? MyMessage {
             let vc = MyMessageController()
-            vc.configure(message: m)
+            vc.configure(message: myMessage)
             cell.embed(vc, into: self)
         } else {
             let vc = PlaceholderMessageController(text: "메시지를 표시할 수 없습니다.")
             cell.embed(vc, into: self)
         }
+
         return cell
     }
 }

@@ -11,28 +11,22 @@ import Foundation
 @MainActor @Observable
 public final class Cheetos: Sendable {
     // MARK: core
-    public init() {
-        
-        CheetosManager.register(self)
-    }
-    internal func delete() {
-        CheetosManager.unregister(self.id)
-    }
+    public init() { }
     
     
     // MARK: state
-    public nonisolated let id = ID()
+    public nonisolated let id = UUID()
     
     public var textInput: String = ""
-
-    public var messages: [any MessageIDRepresentable] = []
+    
+    public var messages: [any MessageInterface] = []
     
     
     // MARK: action
     public func newFortune() async {
         // mutate
-        let fortureRef = Fortune(owner: self.id)
-        self.messages.append(fortureRef.id)
+        let fortureRef = Fortune(owner: self)
+        self.messages.append(fortureRef)
     }
     public func newAdvice() async {
         // capture
@@ -44,37 +38,7 @@ public final class Cheetos: Sendable {
         let textInput = self.textInput
         
         // mutate
-        let myMessageRef = MyMessage(owner: self.id, content: textInput)
-        self.messages.append(myMessageRef.id)
-    }
-    
-    
-    
-    // MARK: value
-    @MainActor
-    public struct ID: Sendable, Hashable {
-        public let rawValue = UUID()
-        nonisolated init() { }
-        
-        public var isExist: Bool {
-            CheetosManager.container[self] != nil
-        }
-        public var ref: Cheetos? {
-            CheetosManager.container[self]
-        }
-    }
-}
-
-
-// MARK: ObjectManager
-@MainActor
-final class CheetosManager: Sendable {
-    // MARK: core
-    static private(set) var container: [Cheetos.ID: Cheetos] = [:]
-    static func register(_ object: Cheetos) {
-        self.container[object.id] = object
-    }
-    static func unregister(_ id: Cheetos.ID) {
-        self.container[id] = nil
+        let myMessageRef = MyMessage(owner: self, content: textInput)
+        self.messages.append(myMessageRef)
     }
 }

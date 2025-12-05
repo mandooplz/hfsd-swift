@@ -11,19 +11,14 @@ import Foundation
 @MainActor @Observable
 public final class Fortune: MessageInterface {
     // MARK: core
-    internal init(owner: Cheetos.ID) {
+    internal init(owner: Cheetos) {
         self.owner = owner
-        
-        FortuneManager.register(self)
-    }
-    internal func delete() {
-        FortuneManager.unregister(self.id)
     }
     
     
     // MARK: state
-    public nonisolated let id = ID()
-    internal nonisolated let owner: Cheetos.ID
+    public nonisolated let id = UUID()
+    internal weak var owner: Cheetos?
     
     public var content: String? = nil
     public var createdAt: Date? = nil
@@ -53,22 +48,8 @@ public final class Fortune: MessageInterface {
         self.isLoading = false
     }
     
-    
-    
+
     // MARK: value
-    @MainActor
-    public struct ID: MessageIDRepresentable, Hashable {
-        public let rawValue = UUID()
-        nonisolated init() { }
-        
-        public var isExist: Bool {
-            FortuneManager.container[self] != nil
-        }
-        public var ref: Fortune? {
-            FortuneManager.container[self]
-        }
-    }
-    
     public struct Content {
         private static let messages = [
             "오늘 작성한 코드가 내일의 포트폴리오가 될 거예요! 🚀 ",
@@ -103,20 +84,5 @@ public final class Fortune: MessageInterface {
     
     public enum Error: String, Swift.Error {
         case alreadyFetched
-    }
-}
-
-
-
-// MARK: ObjectManager
-@MainActor @Observable
-fileprivate final class FortuneManager: Sendable {
-    // MARK: core
-    static var container: [Fortune.ID:Fortune] = [:]
-    static func register(_ object:Fortune) {
-        container[object.id] = object
-    }
-    static func unregister(_ id:Fortune.ID) {
-        container[id] = nil
     }
 }
