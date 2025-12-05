@@ -10,7 +10,7 @@ import Observation
 
 // MARK: View
 final class CheetosController: UIViewController {
-    //
+    // MARK: core
     private let cheetosRef: Cheetos
     init(_ cheetosRef: Cheetos) {
         self.cheetosRef = cheetosRef
@@ -358,6 +358,8 @@ final class PlaceholderMessageController: UIViewController {
 }
 
 
+
+// MARK: Preview
 #Preview {
     CheetosController(.init())
 }

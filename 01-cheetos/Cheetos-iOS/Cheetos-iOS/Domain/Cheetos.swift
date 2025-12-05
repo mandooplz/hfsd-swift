@@ -11,8 +11,7 @@ import Foundation
 @MainActor @Observable
 public final class Cheetos: Sendable {
     // MARK: core
-    public init(enableDelay: Bool = false) {
-        self.enableDelay = enableDelay
+    public init() {
         
         CheetosManager.register(self)
     }
@@ -23,7 +22,6 @@ public final class Cheetos: Sendable {
     
     // MARK: state
     public nonisolated let id = ID()
-    internal nonisolated let enableDelay: Bool
     
     public var textInput: String = ""
 
@@ -69,10 +67,10 @@ public final class Cheetos: Sendable {
 
 
 // MARK: ObjectManager
-@MainActor @Observable
-fileprivate final class CheetosManager: Sendable {
+@MainActor
+final class CheetosManager: Sendable {
     // MARK: core
-    static var container: [Cheetos.ID: Cheetos] = [:]
+    static private(set) var container: [Cheetos.ID: Cheetos] = [:]
     static func register(_ object: Cheetos) {
         self.container[object.id] = object
     }
