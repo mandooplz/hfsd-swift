@@ -5,18 +5,17 @@ import PackageDescription
 
 let package = Package(
     name: "04-sliding-window",
+    platforms: [.macOS(.v15)],
     dependencies: [
         
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
-        .executableTarget(
-            name: "04-sliding-window",
-            dependencies: ["SlidingWindowData"]
-        ),
         .target(
             name: "SlidingWindowData"
+        ),
+        .testTarget(
+            name: "SlidingWindowTests",
+            dependencies: ["SlidingWindowData"]
         )
     ]
 )
