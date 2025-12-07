@@ -11,7 +11,6 @@ import Foundation
 @MainActor @Observable
 internal final class Item: Sendable, Identifiable {
     // MARK: core
-    private(set) var isValid: Bool = true
     init(owner: ItemBoard, sourceId: UUID, timestamp: Date) {
         self.owner = owner
         self.sourceId = sourceId
@@ -20,8 +19,10 @@ internal final class Item: Sendable, Identifiable {
     
     
     // MARK: state
-    internal nonisolated let id = UUID()
-    internal nonisolated let owner: ItemBoard
+    nonisolated let id = UUID()
+    weak var owner: ItemBoard?
+    
+    private(set) var isValid: Bool = true
     
     internal nonisolated let sourceId: UUID
     internal nonisolated let timestamp: Date
@@ -35,7 +36,7 @@ internal final class Item: Sendable, Identifiable {
         guard isValid else { return }
         
         // capture
-        let itemBoxFlow = owner.itemBoxFlow
+        let itemBoxFlow = owner!.itemBoxFlow
         
         // compute
         let snapshot = ItemSnapshot(id: sourceId, timestamp: self.timestamp)
@@ -43,7 +44,7 @@ internal final class Item: Sendable, Identifiable {
         await itemBoxFlow.deleteItemModel(snapshot)
 
         // mutate
-        self.owner.items.removeAll { $0.id == self.id }
+        self.owner?.items.removeAll { $0.id == self.id }
         
         self.isValid = false
     }

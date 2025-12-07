@@ -5,19 +5,22 @@
 //  Created by 김민우 on 10/28/25.
 //
 import Foundation
+import OSLog
 
 
 // MARK: Object
-public class Window {
+@MainActor
+public final class Window {
     // MARK: core
-    public init(_ owner: SlidingWindowData, _ values: [Int]) {
+    private nonisolated let logger = Logger(subsystem: "Window", category: "Domain")
+    public init(_ owner: Problem, _ values: [Int]) {
         self.owner = owner
         self.values = values
         self.size = values.count
     }
     
     // MARK: state
-    let owner: SlidingWindowData
+    weak var owner: Problem?
     
     let size: Int
     var startPosition: Int = 0
@@ -30,40 +33,41 @@ public class Window {
     func append(_ newValue: Int) {
         self.values.append(newValue)
     }
-    func maxValue() -> Int? {
-        return self.values.max()
-    }
     
     // MARK: action
     public func addMaxValue() {
         // capture
-        guard let maxValue = self.maxValue() else {
-            print("최대값이 존재하지 않습니다.")
-            return
-        }
+        let problem = self.owner!
+        let values = self.values
+        
+        
+        // process
+        let maxValue = values.max()!
+        
         
         // mutate
-        owner.result.append(maxValue)
+        problem.result.append(maxValue)
     }
+    
     public func moveRight() {
         // capture
+        let problem = self.owner!
+
+        
+        // process
         let nextPosition = endPosition.advanced(by: 1)
-        guard let nextValue = owner.getNumber(at: nextPosition) else {
-            print("더 이상 이동이 불가능합니다. 현재 위치 \(startPosition)-\(endPosition)")
-            return
-        }
-        guard let maxValue = self.maxValue() else {
-            print("최대값이 존재하지 않습니다.")
-            return
-        }
+        let nextValue = problem.getNumber(at: nextPosition)
+ 
         
         // mutate
-        if nextPosition == owner.numbers.count - 1 {
-            owner.isFinished = true
+        if let nextValue {
+            self.removeFirst()
+            self.append(nextValue)
+            self.startPosition += 1
+            logger.debug("값(\(nextValue)이 추가되었습니다.")
+        } else {
+            problem.isFinished = true
+            logger.debug("더 이상 이동이 불가능해 종료됩니다.")
         }
-            
-        self.removeFirst()
-        self.append(nextValue)
-        self.startPosition += 1
     }
 }

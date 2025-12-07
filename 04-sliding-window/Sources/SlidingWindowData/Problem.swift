@@ -4,13 +4,15 @@
 //
 //  Created by 김민우 on 10/28/25.
 //
-
 import Foundation
+import OSLog
 
 
 // MARK: Object
-public class SlidingWindowData {
+@MainActor
+public final class Problem {
     // MARK: core
+    private nonisolated let logger = Logger(subsystem: "Problem", category: "Domain")
     public init(numbers: [Int], windowSize: Int) {
         self.numbers = numbers
         self.windowSize = windowSize
@@ -34,19 +36,19 @@ public class SlidingWindowData {
     // MARK: action
     public func setUpWindow() {
         // capture
-        guard window == nil else {
+        guard self.window == nil else {
+            logger.error("Window가 이미 존재합니다.")
             return
         }
+        let numbers = self.numbers
+        let windowSize = self.windowSize
+        
         
         // compute
-        let initValues = Array(self.numbers.prefix(self.windowSize))
+        let initValues = Array(numbers.prefix(windowSize))
+        
         
         // mutate
-        if let maxValue = initValues.max() {
-            self.result.append(maxValue)
-        }
-        
-        let windowRef = Window(self, initValues)
-        self.window = windowRef
+        self.window = Window(self, initValues)
     }
 }
