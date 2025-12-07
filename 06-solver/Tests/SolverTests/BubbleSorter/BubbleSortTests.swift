@@ -20,6 +20,21 @@ struct BubbleSortTests {
     // 예시 데이터 셋 모음
         static let dataSets: [SortDataSet] = [
             .init(
+                description: "빈 배열",
+                input: [],
+                expected: []
+            ),
+            .init(
+                description: "단일 원소",
+                input: [42],
+                expected: [42]
+            ),
+            .init(
+                description: "이미 정렬된 배열",
+                input: [1, 2, 3, 4, 5],
+                expected: [1, 2, 3, 4, 5]
+            ),
+            .init(
                 description: "기본 섞인 배열",
                 input: [5, 1, 4, 2, 8],
                 expected: [1, 2, 4, 5, 8]
@@ -58,12 +73,14 @@ struct BubbleSortTests {
     
     @Test(arguments: dataSets) func bubbleSort_sortCorrectly(_ data: SortDataSet) async throws {
         // given
-        let sorter = await BubbleSorter(data: data.expected)
+        let sorter = await BubbleSorter(data: data.input)
         await sorter.setUp()
 
         // when
-        while await sorter.getValidItems().isEmpty == false {
-            for item in await sorter.getValidItems() {
+        while true {
+            let items = await sorter.getValidItems()
+            if items.isEmpty { break }
+            for item in items {
                 await item.validate()
                 await item.exchangeValueWithNextItem()
             }
@@ -72,6 +89,8 @@ struct BubbleSortTests {
         // then
         let result = await sorter.getResult()
         
-        #expect(result == data.expected)
+        #expect(result == data.expected, "\(data.description) 실패: 결과 \(result) ≠ 기대값 \(data.expected)")
+        #expect(await sorter.getValidItems().isEmpty, "정렬 종료 후에도 유효 항목이 남아있습니다.")
     }
 }
+

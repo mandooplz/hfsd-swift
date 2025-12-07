@@ -1,0 +1,31 @@
+{
+  "configurations" : [
+    {
+      "id" : "56CA22D1-0065-4D31-ABD8-56C4391BA801",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "performanceAntipatternCheckerEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "SolverTests",
+        "name" : "SolverTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ValueTests",
+        "name" : "ValueTests"
+      }
+    }
+  ],
+  "version" : 1
+}
