@@ -1,5 +1,5 @@
 //
-//  NewBubbleSorterTests.swift
+//  BubbleSorterTests.swift
 //  Solver
 //
 //  Created by 김민우 on 12/8/25.
@@ -10,11 +10,11 @@ import Testing
 
 // MARK: Tests
 @Suite
-struct NewBubbleSorterTests {
+struct BubbleSorterTests {
     struct Validate {
-        let sorter: NewBubbleSorter
+        let sorter: BubbleSorter
         init() async throws {
-            self.sorter = NewBubbleSorter()
+            self.sorter = BubbleSorter()
         }
         
         @Test func whenDataCountIsOne() async throws {
@@ -60,9 +60,9 @@ struct NewBubbleSorterTests {
     }
     
     struct SetUpWindow {
-        let sorter: NewBubbleSorter
+        let sorter: BubbleSorter
         init() async throws {
-            self.sorter = NewBubbleSorter()
+            self.sorter = BubbleSorter()
         }
         
         @Test func whenDataIsNotValid() async throws {
@@ -116,9 +116,9 @@ struct NewBubbleSorterTests {
     }
     
     struct BubbleUp {
-        let sorter: NewBubbleSorter
+        let sorter: BubbleSorter
         init() async throws {
-            self.sorter = NewBubbleSorter()
+            self.sorter = BubbleSorter()
         }
         
         @Test func sendMaxValueToEnd() async throws {
@@ -187,7 +187,7 @@ struct NewBubbleSorterTests {
 
 
 // MARK: Helpher
-fileprivate extension NewBubbleSorter {
+fileprivate extension BubbleSorter {
     func validateAndSetUpWindow(_ input: [Int]) async throws {
         self.setData(input)
         self.validate()

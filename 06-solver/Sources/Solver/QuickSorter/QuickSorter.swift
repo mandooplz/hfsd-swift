@@ -8,7 +8,7 @@ import Foundation
 
 
 // MARK: Object
-actor QuickSorter: Sendable {
+public actor QuickSorter: Sendable {
     // MARK: core
     public init(data: [Int]) {
         self.data = [DataSegment(data)]

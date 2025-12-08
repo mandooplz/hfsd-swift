@@ -9,9 +9,9 @@ import OSLog
 
 
 // MARK: Object
-public actor NewBubbleSorter: Sendable {
+public actor BubbleSorter: Sendable {
     // MARK: core
-    private nonisolated let logger = Logger(subsystem: "NewBubbleSorter", category: "Domain")
+    private nonisolated let logger = Logger(subsystem: "BubbleSorter", category: "Domain")
     public init() { }
     
     
