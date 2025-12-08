@@ -8,6 +8,7 @@ import Foundation
 
 
 // MARK: Solver
+@available(*, deprecated, message: "Values 값들로 수정될 ")
 @MainActor
 public struct Solver {
     // MARK: bubbleSort

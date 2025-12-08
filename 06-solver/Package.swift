@@ -16,6 +16,7 @@ let package = Package(
         )
     ],
     targets: [
+        // MARK: Solver
         .target(
             name: "Solver"
         ),
@@ -23,12 +24,14 @@ let package = Package(
             name: "SolverTests",
             dependencies: ["Solver"]
         ),
+        
+        // MARK: Values
         .target(
             name: "Values"
         ),
         .testTarget(
             name: "ValueTests",
-            dependencies: ["Values"]
+            dependencies: ["Values", "Solver"]
         ),
     ]
 )
