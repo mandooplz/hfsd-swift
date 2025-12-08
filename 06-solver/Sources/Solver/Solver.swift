@@ -31,13 +31,16 @@ public struct Solver {
     
     
     // MARK: quickSort
-    public static func quickSort(_ data: [Int]) -> [Int] {
+    public static func quickSort(_ data: [Int]) async -> [Int] {
         let sorter = QuickSorter(data: data)
         
-        while sorter.isFinished() == false {
-            sorter.divideData()
+        while true {
+            let isFinished = await sorter.isFinished()
+            if isFinished { break }
+            
+            await sorter.divideData()
         }
         
-        return sorter.flattenData()
+        return await sorter.getResult()
     }
 }

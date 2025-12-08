@@ -22,7 +22,7 @@ public actor NewBubbleSorter: Sendable {
     }
     public private(set) var isValidData: Bool = false
     
-    public private(set) var window: ItemWindow? = nil
+    private(set) var window: ItemWindow? = nil
     
     
     
@@ -95,7 +95,7 @@ public actor NewBubbleSorter: Sendable {
     
     
     // MARK: value
-    public struct ItemWindow: Sendable, Hashable {
+    struct ItemWindow: Sendable, Hashable {
         // MARK: core
         let minIndex: Int
         let size: Int = 2
@@ -116,6 +116,7 @@ public actor NewBubbleSorter: Sendable {
                   right: 1,
                   maxIndex: max)
         }
+        
         
         // MARK: operator
         func reset() -> Self {
@@ -140,6 +141,14 @@ public actor NewBubbleSorter: Sendable {
                     maxIndex: self.maxIndex
                 )
             }
+        }
+        func decrementMaxIndex() -> Self {
+            return .init(
+                minIndex: self.minIndex,
+                left: self.left,
+                right: self.right,
+                maxIndex: self.maxIndex - 1
+            )
         }
     }
 }

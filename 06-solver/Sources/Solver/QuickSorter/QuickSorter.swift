@@ -8,8 +8,7 @@ import Foundation
 
 
 // MARK: Object
-@MainActor
-public final class QuickSorter: Sendable {
+actor QuickSorter: Sendable {
     // MARK: core
     public init(data: [Int]) {
         self.data = [DataSegment(data)]
@@ -24,7 +23,7 @@ public final class QuickSorter: Sendable {
                 $0.isFinished || $0.isFixed
             }
     }
-    public func flattenData() -> [Int] {
+    public func getResult() -> [Int] {
         self.data
             .flatMap {
                 $0.value
@@ -50,22 +49,22 @@ public final class QuickSorter: Sendable {
     
     
     // MARK: value
-    public struct DataSegment: Sendable, Hashable {
+    struct DataSegment: Sendable, Hashable {
         // MARK: core
-        internal let value: [Int]
-        private let count: Int
-        internal let isFixed: Bool
-        internal var isFinished: Bool {
+        let value: [Int]
+        let count: Int
+        let isFixed: Bool
+        var isFinished: Bool {
             return self.count == 0 || self.count == 1
         }
-        public init(_ value: [Int], isFixed: Bool = false) {
+        init(_ value: [Int], isFixed: Bool = false) {
             self.value = value
             self.count = value.count
             self.isFixed = isFixed
         }
         
         // MARK: operator
-        public func divideByPivot() -> [DataSegment] {
+        func divideByPivot() -> [DataSegment] {
             // 빈 세그먼트 처리
             guard count > 0 else {
                 return [DataSegment([]), DataSegment([]),DataSegment([])]
