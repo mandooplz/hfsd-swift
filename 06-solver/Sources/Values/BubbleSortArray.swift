@@ -19,6 +19,6 @@ public nonisolated struct BubbleSortArray: Sendable, Hashable {
     
     // MARK: operator
     public func sortedRawValue() async -> [Int] {
-        fatalError()
+        fatalError("구현 예정")
     }
 }
