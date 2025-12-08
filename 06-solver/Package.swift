@@ -28,11 +28,12 @@ let package = Package(
         
         // MARK: Values
         .target(
-            name: "Values"
+            name: "Values",
+            dependencies: ["Solver"]
         ),
         .testTarget(
             name: "ValueTests",
-            dependencies: ["Values", "Solver"]
+            dependencies: ["Values"]
         ),
     ]
 )

@@ -18,7 +18,19 @@ public nonisolated struct BubbleSortArray: Sendable, Hashable {
     
     
     // MARK: operator
-    public func sortedRawValue() async -> [Int] {
-        fatalError("구현 예정")
+    public func sorted() async -> [Int] {
+        let sorter = NewBubbleSorter()
+        
+        await sorter.setData(rawValue)
+        await sorter.validate()
+        
+        await sorter.setUpWindow()
+        
+        
+        for _ in rawValue {
+            await sorter.bubbleUp()
+        }
+        
+        return await sorter.data
     }
 }

@@ -90,6 +90,9 @@ public actor NewBubbleSorter: Sendable {
             }
             self.window = nextWindow
         }
+        
+        self.window = self.window?
+            .reset()
     }
     
     

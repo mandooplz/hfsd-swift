@@ -136,7 +136,6 @@ struct NewBubbleSorterTests {
             
             #expect(result == [1,2,3,4,5])
         }
-        
         @Test func sendMaxValueToEnd2() async throws {
             // given
             let input = [1,5,2,3,4]
@@ -152,7 +151,6 @@ struct NewBubbleSorterTests {
             
             #expect(result == [1,2,3,4,5])
         }
-        
         @Test func sendMaxValueToEnd3() async throws {
             // given
             let input = [5,1]
@@ -167,6 +165,21 @@ struct NewBubbleSorterTests {
             let result = await sorter.data
             
             #expect(result == [1,5])
+        }
+        
+        @Test func resetWindow() async throws {
+            // given
+            let input = [1,5,2,3,4]
+            
+            try await sorter.validateAndSetUpWindow(input)
+            
+            let window = try #require(await sorter.window)
+            
+            // when
+            await sorter.bubbleUp()
+            
+            // then
+            await #expect(sorter.window == window)
         }
     }
 }
