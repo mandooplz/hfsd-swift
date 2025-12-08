@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Solver",
+    platforms: [.macOS(.v15)],
     products: [
         .library(
             name: "Solver",

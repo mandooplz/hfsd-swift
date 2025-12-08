@@ -5,18 +5,21 @@
 //  Created by 김민우 on 12/8/25.
 //
 import Foundation
+import OSLog
 
 
 // MARK: Object
 public actor NewBubbleSorter: Sendable {
     // MARK: core
-    public init(_ rawData: [Int]) {
-        self.rawData = rawData
-    }
+    private nonisolated let logger = Logger(subsystem: "NewBubbleSorter", category: "Domain")
+    public init() { }
     
     
     // MARK: state
-    public private(set) var rawData: [Int]
+    public private(set) var data: [Int] = []
+    public func setData(_ data: [Int]) {
+        self.data = data
+    }
     public private(set) var isValidData: Bool = false
     
     public private(set) var window: ItemWindow? = nil
@@ -27,22 +30,26 @@ public actor NewBubbleSorter: Sendable {
     public func validate() {
         // capture
         guard self.isValidData == false else {
-            print("이미 검증 결과가 존재합니다.")
+            logger.debug("이미 검증 결과가 존재합니다.")
             return
         }
-        let rawData = self.rawData
+        let rawData = self.data
         
         // process
         let dataCount = rawData.count
         
         // mutate
-        if dataCount > 2 {
+        if dataCount > 1 {
             self.isValidData = true
         }
     }
     public func setUpWindow() {
         // capture
-        let rawData = self.rawData
+        guard isValidData == true else {
+            logger.error("validate를 통해 데이터 검증을 먼저 수행해야 합니다.")
+            return
+        }
+        let rawData = self.data
         
         // process
         let minIndex = 0
@@ -57,26 +64,28 @@ public actor NewBubbleSorter: Sendable {
     public func bubbleUp() {
         // capture
         guard isValidData == true else {
-            print("validate를 통해 데이터 검증을 먼저 수행해야 합니다.")
+            logger.error("validate를 통해 데이터 검증을 먼저 수행해야 합니다.")
             return
         }
         
-        guard let window else {
-            print("현재 window가 설정되어 있지 않습니다.")
+        guard window != nil else {
+            logger.error("현재 window가 설정되어 있지 않습니다.")
             return
         }
         
         // mutate
         while true {
-            let leftValue = self.rawData[window.left]
-            let rightValue = self.rawData[window.right]
+            let window = self.window!
+            
+            let leftValue = self.data[window.left]
+            let rightValue = self.data[window.right]
             
             if leftValue > rightValue {
-                self.rawData.swapAt(window.left, window.right)
+                self.data.swapAt(window.left, window.right)
             }
             
             guard let nextWindow = window.next() else {
-                print("다음 window가 존재하지 않습니다.")
+                logger.debug("다음 window가 존재하지 않습니다.")
                 break
             }
             self.window = nextWindow
