@@ -11,10 +11,78 @@ import Foundation
 @MainActor
 public final class QuickSorter: Sendable {
     // MARK: core
+    public init(data: [Int]) {
+        self.data = [DataSegment(data)]
+    }
     
     
     // MARK: state
+    private var data: [DataSegment]
+    public func isFinished() -> Bool {
+        self.data
+            .allSatisfy {
+                $0.isFinished || $0.isFixed
+            }
+    }
+    public func flattenData() -> [Int] {
+        self.data
+            .flatMap {
+                $0.value
+            }
+    }
     
     
     // MARK: action
+    public func divideData() {
+        // capture
+        let currentData = self.data
+        
+        
+        // process
+        let newData: [DataSegment] = currentData
+            .flatMap { segment in
+                segment.divideByPivot()
+            }
+        
+        // mutate
+        self.data = newData
+    }
+    
+    
+    // MARK: value
+    public struct DataSegment: Sendable, Hashable {
+        // MARK: core
+        internal let value: [Int]
+        private let count: Int
+        internal let isFixed: Bool
+        internal var isFinished: Bool {
+            return self.count == 0 || self.count == 1
+        }
+        public init(_ value: [Int], isFixed: Bool = false) {
+            self.value = value
+            self.count = value.count
+            self.isFixed = isFixed
+        }
+        
+        // MARK: operator
+        public func divideByPivot() -> [DataSegment] {
+            // 빈 세그먼트 처리
+            guard count > 0 else {
+                return [DataSegment([]), DataSegment([]),DataSegment([])]
+            }
+            
+            // 피벗은 랜덤 값으로 선택
+            let pivotValue = value.randomElement()!
+            
+            let left = value.filter { $0 < pivotValue }
+            let pivot = value.filter { $0 == pivotValue }
+            let right = value.filter { $0 > pivotValue }
+            
+            return [
+                DataSegment(left),
+                DataSegment(pivot, isFixed: true),
+                DataSegment(right)
+                ]
+        }
+    }
 }

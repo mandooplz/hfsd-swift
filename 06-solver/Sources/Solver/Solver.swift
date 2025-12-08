@@ -10,6 +10,7 @@ import Foundation
 // MARK: Solver
 @MainActor
 public struct Solver {
+    // MARK: bubbleSort
     public static func bubbleSort(_ data: [Int]) -> [Int] {
         let sorter = BubbleSorter(data: data)
         sorter.setUp()
@@ -25,5 +26,17 @@ public struct Solver {
         }
         
         return sorter.getResult()
+    }
+    
+    
+    // MARK: quickSort
+    public static func quickSort(_ data: [Int]) -> [Int] {
+        let sorter = QuickSorter(data: data)
+        
+        while sorter.isFinished() == false {
+            sorter.divideData()
+        }
+        
+        return sorter.flattenData()
     }
 }
