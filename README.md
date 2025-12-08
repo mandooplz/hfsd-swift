@@ -8,14 +8,14 @@ HFSD(Human-Friendly Softwared Design)은 소프트웨어를 사용자 친화적�
 
 ## 📌 예제 코드 개요
 
-| #   | 프로젝트           | 시나리오                           | 주요 포인트                                                                                                | Docs                                                       |
+| #   | 프로젝트           | 상세                               | 주요 포인트                                                                                                | Docs                                                       |
 | --- | ------------------ | ---------------------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
 | 01  | **cheetos**        | UIKit 운세 메신저 앱               | Swift Concurrency(`async/await`, `@MainActor`), Observation(`@Observable`), Auto Layout, iOS 17 시뮬레이터 | [01-cheetos/README.md](01-cheetos/README.md)               |
-| 02  | **bookstore**      | SwiftUI + Core Data 아이템 보드    | `NavigationStack`, `List`, `@State`, Core Data `NSPersistentContainer`, 실행 모드 전환                     | [02-bookstore/README.md](02-bookstore/README.md)           |
-| 03  | **tictactoe-mac**  | macOS용 SwiftUI 틱택토             | Observation Framework, `NavigationSplitView`, `Grid`, `List`, macOS 14 타깃                                | [03-tictactoe-mac/README.md](03-tictactoe-mac/README.md)   |
-| 04  | **sliding-window** | Sliding Window Maximum 솔루션      | SwiftPM CLI 타깃, 입력 파싱, 윈도우 모델링, 유닛 테스트                                                    | [04-sliding-window/README.md](04-sliding-window/README.md) |
-| 05  | **my-chat**        | Vapor 서버 + SwiftUI 채팅 샘플     | `actor` 기반 동시성, Vapor(WebSocket/REST/인증), iOS 클라이언트 연동, `curl` 테스트                        | [05-my-chat/README.md](05-my-chat/README.md)               |
-| 06  | **solver**         | 버블 정렬 단계를 객체로 푼 SwiftPM | MainActor 상태 관리, `BubbleSorter`/`BubbleItem` 분리, SwiftPM 멀티 타깃, XCTest로 값·행동 테스트          | [06-solver](06-solver)                                     |
+| 02  | **bookstore**      | 아이템 보드                        | `NavigationStack`, `List`, `@State`, Core Data `NSPersistentContainer`, 실행 모드 전환                     | [02-bookstore/README.md](02-bookstore/README.md)           |
+| 03  | **tictactoe-mac**  | macOS용 틱택토 게임                | Observation Framework, `NavigationSplitView`, `Grid`, `List`, macOS 14 타깃                                | [03-tictactoe-mac/README.md](03-tictactoe-mac/README.md)   |
+| 04  | **sliding-window** | Sliding Window Maximum 문제 솔루션 | SwiftPM CLI 타깃, 입력 파싱, 윈도우 모델링, 유닛 테스트                                                    | [04-sliding-window/README.md](04-sliding-window/README.md) |
+| 05  | **my-chat**        | 채팅 서버 및 앱                    | `actor` 기반 동시성, Vapor(WebSocket/REST/인증), iOS 클라이언트 연동, `curl` 테스트                        | [05-my-chat/README.md](05-my-chat/README.md)               |
+| 06  | **solver**         | 문제 풀이 Solver                   | MainActor 상태 관리, `BubbleSorter`/`BubbleItem` 분리, SwiftPM 멀티 타깃, XCTest로 값·행동 테스트          | [06-solver](06-solver)                                     |
 
 ## 📚 참고 자료
 

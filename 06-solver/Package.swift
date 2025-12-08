@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "Solver",
+    platforms: [.macOS(.v15)],
     products: [
         .library(
             name: "Solver",
@@ -16,6 +17,7 @@ let package = Package(
         )
     ],
     targets: [
+        // MARK: Solver
         .target(
             name: "Solver"
         ),
@@ -23,8 +25,11 @@ let package = Package(
             name: "SolverTests",
             dependencies: ["Solver"]
         ),
+        
+        // MARK: Values
         .target(
-            name: "Values"
+            name: "Values",
+            dependencies: ["Solver"]
         ),
         .testTarget(
             name: "ValueTests",
