@@ -7,28 +7,28 @@
 import SwiftUI
 
 
-
 // MARK: View
 struct GameBoardView: View {
     // MARK: core
     let gameBoard: GameBoard
-    init(_ gameBoardRef: GameBoard) {
-        self.gameBoard = gameBoardRef
-    }
 
     
     // MARK: body
     var body: some View {
         VStack {
-            HStack {
-                Text("Current Player: \(gameBoard.currentPlayer == .X ? "X" : "O")")
-                
-                Spacer()
-                
-                if gameBoard.isEnd { GameResultLabel }
-            }
-            .font(.title)
-            .padding()
+            GameBoardStatus(
+                gameBoard: gameBoard
+            )
+            
+//            HStack {
+//                Text("Current Player: \(gameBoard.currentPlayer.rawValue)")
+//                
+//                Spacer()
+//                
+//                if gameBoard.isEnd { GameResultLabel }
+//            }
+//            .font(.title)
+//            .padding()
 
             CardsGrid
         }
@@ -52,6 +52,34 @@ struct GameBoardView: View {
 
 
 // MARK: Component
+fileprivate struct GameBoardStatus: View {
+    let gameBoard: GameBoard
+    
+    var body: some View {
+        HStack {
+            Text("Current Player: \(gameBoard.currentPlayer.rawValue)")
+            
+            Spacer()
+            
+            if gameBoard.isEnd {
+                VStack {
+                    if let result = gameBoard.result {
+                        switch result {
+                        case .draw:
+                            Text("It's a draw!")
+                                
+                        case .win(let player):
+                            Text("\(player.rawValue) wins!")
+                                .foregroundStyle(Color.blue)
+                        }
+                    }
+                }
+            }
+        }
+        .font(.title)
+        .padding()
+    }
+}
 extension GameBoardView {
     var GameResultLabel: some View {
         VStack {
@@ -87,16 +115,19 @@ extension GameBoardView {
 
 
 // MARK: Preview
-private struct GameBoardPreview: View {
-    let tictactoeRef = TicTacToe()
+fileprivate struct GameBoardPreview: View {
+    let tictactoe = TicTacToe()
     
     var body: some View {
-        if let gameBoard = tictactoeRef.boardList.first {
-            GameBoardView(gameBoard)
+        if let gameBoard = tictactoe.boards.first {
+            GameBoardView(gameBoard: gameBoard)
         } else {
             ProgressView("GameBoard Preview")
                 .task {
-                    await tictactoeRef.createGame()
+                    await tictactoe.createGame()
+                    
+                    let gameBoard = tictactoe.boards.first
+                    await gameBoard?.setUp()
                 }
         }
     }
@@ -104,4 +135,5 @@ private struct GameBoardPreview: View {
 
 #Preview {
     GameBoardPreview()
+        .frame(width: 600, height: 600)
 }

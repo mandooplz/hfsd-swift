@@ -35,7 +35,7 @@ struct TicTacToeView: View {
             content: {
                 if let selectedBoard = tictactoe.selectedBoard,
                    let board = tictactoe.getBoard(id: selectedBoard) {
-                    GameBoardView(board)
+                    GameBoardView(gameBoard: board)
                 } else {
                     BoardEmptyView()
                 }
@@ -77,7 +77,7 @@ fileprivate struct GameList: View {
     var body: some View {
         List(tictactoeRef.boardList, id: \.self.id, selection: selectedBoard) { gameBoard in
             NavigationLink(value: gameBoard.id) {
-                GameBoardLabel(gameBoard)
+                GameBoardLabel(gameBoard: gameBoard)
             }
         }
     }
