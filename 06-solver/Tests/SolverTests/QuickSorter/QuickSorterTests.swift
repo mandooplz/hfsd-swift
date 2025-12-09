@@ -47,7 +47,6 @@ struct QuickSorterTests {
             await #expect(sorter.data.count == 3)
         }
         
-        
         @Test func secondSegemntIsPivot() async throws {
             // given
             let input = [1,2,3,4,5]
