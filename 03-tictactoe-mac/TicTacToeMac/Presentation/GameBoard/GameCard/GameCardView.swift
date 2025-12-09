@@ -18,8 +18,8 @@ struct GameCardView: View {
                 .fill(Color.gray.opacity(0.2))
                 .aspectRatio(1, contentMode: .fit)
 
-            if let owner = gameCard.owner {
-                Text(owner == .X ? "X" : "O")
+            if let player = gameCard.player {
+                Text(player == .X ? "X" : "O")
                     .font(.largeTitle)
                     .fontWeight(.bold)
             }

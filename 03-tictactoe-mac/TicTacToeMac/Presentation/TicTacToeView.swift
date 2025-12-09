@@ -11,13 +11,7 @@ import SwiftUI
 // MARK: View
 struct TicTacToeView: View {
     // MARK: core
-    let tictactoeRef: TicTacToe
-    init(_ tictactoeRef: TicTacToe) {
-        self.tictactoeRef = tictactoeRef
-    }
-    
-    // MARK: state
-    @State private var selectedBoard: GameBoard.ID?
+    @Bindable var tictactoe: TicTacToe
 
     
     // MARK: body
@@ -28,21 +22,19 @@ struct TicTacToeView: View {
                     label: "New Game",
                     action: {
                         Task {
-                            await tictactoeRef.createGame()
-                            
-                            self.selectedBoard = tictactoeRef.boardList.last
+                            await tictactoe.createGame()
                         }
                     }
                 )
                 
                 GameList(
-                    tictactoeRef: tictactoeRef,
-                    selectedBoard: $selectedBoard
+                    tictactoeRef: tictactoe,
+                    selectedBoard: $tictactoe.selectedBoard
                 )
             },
             content: {
-                if let selectedBoard,
-                    let board = selectedBoard.ref {
+                if let selectedBoard = tictactoe.selectedBoard,
+                   let board = tictactoe.getBoard(id: selectedBoard) {
                     GameBoardView(board)
                 } else {
                     BoardEmptyView()
@@ -83,11 +75,9 @@ fileprivate struct GameList: View {
     let selectedBoard: Binding<GameBoard.ID?>
     
     var body: some View {
-        List(tictactoeRef.boardList, selection: selectedBoard) { gameBoardID in
-            NavigationLink(value: gameBoardID) {
-                if let gameBoardRef = gameBoardID.ref {
-                    GameBoardLabel(gameBoardRef)
-                }
+        List(tictactoeRef.boardList, id: \.self.id, selection: selectedBoard) { gameBoard in
+            NavigationLink(value: gameBoard.id) {
+                GameBoardLabel(gameBoard)
             }
         }
     }
@@ -111,5 +101,5 @@ fileprivate struct BoardEmptyView: View {
 
 // Preview
 #Preview {
-    TicTacToeView(.init())
+    TicTacToeView(tictactoe: TicTacToe())
 }

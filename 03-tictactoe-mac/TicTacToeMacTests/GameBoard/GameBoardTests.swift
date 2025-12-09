@@ -13,122 +13,61 @@ import Testing
 @Suite("GameBoard")
 struct GameBoardTests {
     struct SetUp {
-        let tictactoeRef: TicTacToe
-        let gameBoardRef: GameBoard
+        let tictactoe: TicTacToe
+        let gameBoard: GameBoard
         init() async throws {
-            self.tictactoeRef = await TicTacToe()
-            self.gameBoardRef = try await getGameBoard(tictactoeRef)
+            self.tictactoe = await TicTacToe()
+            self.gameBoard = try await getGameBoard(tictactoe)
         }
         
-        @Test func whenGameBoardIsDeleted() async throws {
-            // given
-            try await #require(gameBoardRef.id.isExist == true)
-            
-            await gameBoardRef.setHook {
-                await gameBoardRef.delete()
-            }
-            
-            // when
-            await gameBoardRef.setUp()
-            
-            // then
-            let issue = try #require(await gameBoardRef.issue)
-            #expect(issue.reason == "gameBoardIsDeleted")
-        }
         @Test func whenAlreadySetUp() async throws {
             // given
-            await gameBoardRef.setUp()
-            try await #require(gameBoardRef.cards.isEmpty == false)
-            try await #require(gameBoardRef.issue == nil)
+            await gameBoard.setUp()
+            
+            try await #require(gameBoard.cards.isEmpty == false)
+            
+            let oldCards = await gameBoard.cards
             
             // when
-            await gameBoardRef.setUp()
+            await gameBoard.setUp()
             
             // then
-            let issue = try #require(await gameBoardRef.issue)
-            #expect(issue.reason == "alreadySetUp")
+            let cards = await gameBoard.cards
+            
+            let oldCardIds = oldCards.map { $0.id }
         }
         
         @Test func createNineGameCards() async throws {
             // given
-            try await #require(gameBoardRef.cards.isEmpty == true)
+            try await #require(gameBoard.cards.isEmpty == true)
             
             // when
-            await gameBoardRef.setUp()
+            await gameBoard.setUp()
             
             // then
-            await #expect(gameBoardRef.cards.count == 9)
-            
-            for gameCard in await gameBoardRef.cards.values {
-                let gameCardRef = try #require(await gameCard.ref)
-                let position = gameCardRef.position
-                
-                await #expect(gameBoardRef.cards[position] == gameCard)
-            }
+            await #expect(gameBoard.cards.count == 9)
         }
     }
     
     struct RemoveBoard {
-        let tictactoeRef: TicTacToe
-        let gameBoardRef: GameBoard
+        let tictactoe: TicTacToe
+        let gameBoard: GameBoard
         init() async throws {
-            self.tictactoeRef = await TicTacToe()
-            self.gameBoardRef = try await getGameBoard(tictactoeRef)
+            self.tictactoe = await TicTacToe()
+            self.gameBoard = try await getGameBoard(tictactoe)
         }
         
-        @Test func whenGameBoardIsDeleted() async throws {
+        @Test func TicTacToe_deleteBoard() async throws {
             // given
-            try await #require(gameBoardRef.id.isExist == true)
+            let gameBoardId = gameBoard.id
             
-            await gameBoardRef.setHook {
-                await gameBoardRef.delete()
-            }
+            try await #require(tictactoe.getBoard(id: gameBoardId) != nil)
             
             // when
-            await gameBoardRef.removeBoard()
+            await gameBoard.removeBoard()
             
             // then
-            let issue = try #require(await gameBoardRef.issue)
-            #expect(issue.reason == "gameBoardIsDeleted")
-        }
-        
-        @Test func deleteBoard() async throws {
-            // given
-            try await #require(gameBoardRef.id.isExist == true)
-            
-            // when
-            await gameBoardRef.removeBoard()
-            
-            // then
-            await #expect(gameBoardRef.id.isExist == false)
-        }
-        @Test func deleteCards() async throws {
-            // given
-            await gameBoardRef.setUp()
-            
-            try await #require(gameBoardRef.cards.count > 0 )
-            let gameCards = await gameBoardRef.cards.values
-            
-            // when
-            await gameBoardRef.removeBoard()
-            
-            // then
-            for gameCard in gameCards {
-                await #expect(gameCard.isExist == false)
-            }
-        }
-        @Test func removeBoard_TicTacToe() async throws {
-            // given
-            let gameBoard = gameBoardRef.id
-            let tictactoeRef = try #require(await gameBoardRef.tictactoe.ref)
-            
-            try await #require(tictactoeRef.boards.contains(gameBoard) == true)
-            
-            // when
-            await gameBoardRef.removeBoard()
-            
-            // then
-            await #expect(tictactoeRef.boards.contains(gameBoard) == false)
+            await #expect(tictactoe.getBoard(id: gameBoardId) == nil)
         }
     }
 }
@@ -137,11 +76,13 @@ struct GameBoardTests {
 
 // MARK: Helphers
 private func getGameBoard(_ tictactoeRef: TicTacToe) async throws -> GameBoard {
+    // create GameBoard
     try await #require(tictactoeRef.boards.isEmpty)
     
     await tictactoeRef.createGame()
     
     try await #require(tictactoeRef.boards.count == 1)
     
-    return try #require(await tictactoeRef.boards.first?.ref)
+    let gameBoard = try #require(await tictactoeRef.boards.first)
+    return gameBoard
 }

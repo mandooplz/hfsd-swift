@@ -11,9 +11,9 @@ import SwiftUI
 // MARK: View
 struct GameBoardView: View {
     // MARK: core
-    let gameBoardRef: GameBoard
+    let gameBoard: GameBoard
     init(_ gameBoardRef: GameBoard) {
-        self.gameBoardRef = gameBoardRef
+        self.gameBoard = gameBoardRef
     }
 
     
@@ -21,11 +21,11 @@ struct GameBoardView: View {
     var body: some View {
         VStack {
             HStack {
-                Text("Current Player: \(gameBoardRef.currentPlayer == .X ? "X" : "O")")
+                Text("Current Player: \(gameBoard.currentPlayer == .X ? "X" : "O")")
                 
                 Spacer()
                 
-                if gameBoardRef.isEnd { GameResultLabel }
+                if gameBoard.isEnd { GameResultLabel }
             }
             .font(.title)
             .padding()
@@ -35,11 +35,11 @@ struct GameBoardView: View {
         
         // navigtion
         .toolbar {
-            if gameBoardRef.isEnd {
+            if gameBoard.isEnd {
                 ToolbarItem(placement: .primaryAction) {
                     Button {
                         Task {
-                            await gameBoardRef.removeBoard()
+                            await gameBoard.removeBoard()
                         }
                     } label: {
                         Image(systemName: "trash")
@@ -55,7 +55,7 @@ struct GameBoardView: View {
 extension GameBoardView {
     var GameResultLabel: some View {
         VStack {
-            if let result = gameBoardRef.result {
+            if let result = gameBoard.result {
                 switch result {
                 case .draw:
                     Text("It's a draw!")
@@ -72,8 +72,9 @@ extension GameBoardView {
             ForEach(0..<3) { row in
                 GridRow {
                     ForEach(0..<3) { col in
-                        let position = row * 3 + col
-                        if let cardID = gameBoardRef.cards[position], let card = cardID.ref {
+                        let position = GameBoard.CardPosition(row * 3 + col)
+                        
+                        if let card = gameBoard.getCard(position) {
                             GameCardView(gameCard: card)
                         }
                     }
@@ -90,9 +91,8 @@ private struct GameBoardPreview: View {
     let tictactoeRef = TicTacToe()
     
     var body: some View {
-        if let gameBoard = tictactoeRef.boardList.first,
-           let gameBoardRef = gameBoard.ref {
-            GameBoardView(gameBoardRef)
+        if let gameBoard = tictactoeRef.boardList.first {
+            GameBoardView(gameBoard)
         } else {
             ProgressView("GameBoard Preview")
                 .task {
