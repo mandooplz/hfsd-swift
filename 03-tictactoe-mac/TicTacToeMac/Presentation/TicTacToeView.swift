@@ -23,7 +23,16 @@ struct TicTacToeView: View {
     // MARK: body
     var body: some View {
         NavigationSplitView {
-            NewGameButton
+            NewGameButton(
+                label: "New Game",
+                action: {
+                    Task {
+                        await tictactoeRef.createGame()
+                        
+                        self.selectedBoard = tictactoeRef.boardList.last
+                    }
+                }
+            )
             
             GameList
             
@@ -47,18 +56,20 @@ struct TicTacToeView: View {
 }
 
 
-// MARK: Components
-extension TicTacToeView {
-    var NewGameButton: some View {
-        Button("New Game") {
-            Task {
-                await tictactoeRef.createGame()
-                
-                self.selectedBoard = tictactoeRef.boardList.last
-            }
+// MARK: Component
+fileprivate struct NewGameButton: View {
+    let label: String
+    let action: () -> Void
+    
+    var body: some View {
+        Button(self.label) {
+            action()
         }
         .padding()
     }
+}
+
+extension TicTacToeView {
     
     var GameList: some View {
         List(tictactoeRef.boardList, selection: $selectedBoard) { gameBoardID in
