@@ -10,13 +10,15 @@ import Foundation
 // MARK: Object
 public actor QuickSorter: Sendable {
     // MARK: core
-    public init(_ data: [Int]) {
-        self.data = [DataSegment(data)]
-    }
+    public init() { }
     
     
     // MARK: state
-    private var data: [DataSegment]
+    private(set) var data: [DataSegment] = []
+    public func setData(_ data: [Int]) {
+        self.data = [DataSegment(data)]
+    }
+    
     public func isFinished() -> Bool {
         self.data
             .allSatisfy {
@@ -57,6 +59,7 @@ public actor QuickSorter: Sendable {
         var isFinished: Bool {
             return self.count == 0 || self.count == 1
         }
+        
         init(_ value: [Int], isFixed: Bool = false) {
             self.value = value
             self.count = value.count

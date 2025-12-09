@@ -11,19 +11,18 @@ import SwiftUI
 // MARK: App
 @main
 struct TicTacToeMacApp: App {
-    let tictactoeRef = TicTacToe()
+    let tictactoe = TicTacToe()
     
     var body: some Scene {
         WindowGroup {
-            TicTacToeView(tictactoeRef)
+            TicTacToeView(tictactoe: tictactoe)
         }
         
-        // command
         .commands {
             CommandMenu("Game") {
                 Button("게임 생성") {
                     Task {
-                        await tictactoeRef.createGame()
+                        await tictactoe.createGame()
                     }
                 }
             }

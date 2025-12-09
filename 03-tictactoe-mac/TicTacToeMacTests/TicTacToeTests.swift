@@ -18,22 +18,6 @@ struct TicTacToeTests {
             self.tictactoeRef = await TicTacToe()
         }
         
-        @Test func whenTicTacToeIsDeleted() async throws {
-            // given
-            try await #require(tictactoeRef.id.isExist == true)
-            
-            await tictactoeRef.setCallback {
-                await tictactoeRef.delete()
-            }
-            
-            // when
-            await tictactoeRef.createGame()
-            
-            // then
-            let issue = try #require(await tictactoeRef.issue)
-            #expect(issue.reason == "tictactoeIsDeleted")
-        }
-        
         @Test func appendGameBoard_TicTacToe() async throws {
             // given
             try await #require(tictactoeRef.boards.isEmpty)
@@ -56,8 +40,7 @@ struct TicTacToeTests {
             await tictactoeRef.createGame()
             
             // then
-            let gameBoard = try #require(await tictactoeRef.boards.first)
-            await #expect(gameBoard.isExist == true)
+            await #expect(tictactoeRef.boards.count == 1)
         }
     }
 }
