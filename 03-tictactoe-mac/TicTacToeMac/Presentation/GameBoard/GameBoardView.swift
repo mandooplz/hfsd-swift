@@ -20,17 +20,9 @@ struct GameBoardView: View {
                 gameBoard: gameBoard
             )
             
-//            HStack {
-//                Text("Current Player: \(gameBoard.currentPlayer.rawValue)")
-//                
-//                Spacer()
-//                
-//                if gameBoard.isEnd { GameResultLabel }
-//            }
-//            .font(.title)
-//            .padding()
-
-            CardsGrid
+            GameCardGrid(
+                gameBoard: gameBoard
+            )
         }
         
         // navigtion
@@ -80,22 +72,11 @@ fileprivate struct GameBoardStatus: View {
         .padding()
     }
 }
-extension GameBoardView {
-    var GameResultLabel: some View {
-        VStack {
-            if let result = gameBoard.result {
-                switch result {
-                case .draw:
-                    Text("It's a draw!")
-                        
-                case .win(let player):
-                    Text("\(player.rawValue) wins!")
-                        .foregroundStyle(Color.blue)
-                }
-            }
-        }
-    }
-    var CardsGrid: some View {
+
+fileprivate struct GameCardGrid: View {
+    let gameBoard: GameBoard
+    
+    var body: some View {
         Grid {
             ForEach(0..<3) { row in
                 GridRow {
